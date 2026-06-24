@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Status mentalis rapportage</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    label { display:block; margin-top: 12px; font-weight: 600; }
+    input, textarea, button { width: 100%; padding: 10px; margin-top: 6px; box-sizing: border-box; }
+    textarea { min-height: 90px; }
+    button { margin-top: 16px; cursor: pointer; }
+    pre { background:#f5f5f5; padding:16px; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Status mentalis rapportage</h1>
+
+  <label>Naam / code</label>
+  <input id="naam" placeholder="Initialen of patiëntcode">
+
+  <label>Datum</label>
+  <input id="datum" type="date">
+
+  <label>Bewustzijn</label>
+  <input id="bewustzijn" value="Helder">
+
+  <label>Oriëntatie</label>
+  <input id="orientatie" value="Georiënteerd in tijd, plaats en persoon">
+
+  <label>Stemming</label>
+  <input id="stemming" value="Neutraal">
+
+  <label>Denkinhoud</label>
+  <input id="denkinhoud" value="Geen waanideeën of suïcidaliteit gemeld">
+
+  <label>Waarneming</label>
+  <input id="waarneming" value="Geen hallucinaties">
+
+  <label>Overige observaties</label>
+  <textarea id="extra" placeholder="Aanvullende notities"></textarea>
+
+  <button onclick="genereer()">Genereer rapport</button>
+  <button onclick="kopieer()">Kopieer rapport</button>
+
+  <h2>Rapport</h2>
+  <pre id="uitvoer"></pre>
+
+  <script>
+    function v(id){ return document.getElementById(id).value.trim(); }
+    function genereer() {
+      const tekst =
+`Status mentalis${v('naam') ? ' - ' + v('naam') : ''}${v('datum') ? ' - ' + v('datum') : ''}
+
+Bewustzijn: ${v('bewustzijn')}.
+Oriëntatie: ${v('orientatie')}.
+Stemming: ${v('stemming')}.
+Denkinhoud: ${v('denkinhoud')}.
+Waarneming: ${v('waarneming')}.
+Aanvullend: ${v('extra') || 'Geen verdere bijzonderheden.'}`;
+
+      document.getElementById('uitvoer').textContent = tekst;
+      return tekst;
+    }
+    async function kopieer() {
+      const tekst = genereer();
+      try { await navigator.clipboard.writeText(tekst); } catch(e) {}
+    }
+    genereer();
+  </script>
+</body>
+</html>
