@@ -3,69 +3,422 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Status mentalis rapportage</title>
+  <title>Status mentalis rapportagegenerator</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
-    label { display:block; margin-top: 12px; font-weight: 600; }
-    input, textarea, button { width: 100%; padding: 10px; margin-top: 6px; box-sizing: border-box; }
-    textarea { min-height: 90px; }
-    button { margin-top: 16px; cursor: pointer; }
-    pre { background:#f5f5f5; padding:16px; white-space:pre-wrap; }
+    :root{
+      --bg:#f6f7f8;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#d1d5db;
+      --accent:#0b5fff;
+      --accent2:#e8f0ff;
+    }
+    body{
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1,h2{ margin: 0 0 12px; }
+    p{ margin: 8px 0 0; color: var(--muted); }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items:start;
+      margin-top: 16px;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.03);
+    }
+    .field{
+      margin-bottom: 12px;
+    }
+    label{
+      display:block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    select,input,textarea{
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      background: #fff;
+    }
+    textarea{
+      min-height: 84px;
+      resize: vertical;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 14px 0 0;
+    }
+    button{
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.secondary{
+      background: #e5e7eb;
+      color: #111827;
+    }
+    pre{
+      white-space: pre-wrap;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 16px;
+      border-radius: 12px;
+      min-height: 560px;
+      overflow:auto;
+    }
+    .small{ font-size: .95rem; }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+      .row{ grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <h1>Status mentalis rapportage</h1>
+  <div class="wrap">
+    <h1>Status mentalis rapportagegenerator</h1>
+    <p>Keuzelijsten per onderdeel, met automatische rapporttekst. Alles werkt lokaal in je browser.</p>
 
-  <label>Naam / code</label>
-  <input id="naam" placeholder="Initialen of patiëntcode">
+    <div class="grid">
+      <div class="card">
+        <div class="row">
+          <div class="field">
+            <label>Naam / code</label>
+            <input id="naam" placeholder="Initialen of patiëntcode">
+          </div>
+          <div class="field">
+            <label>Datum</label>
+            <input id="datum" type="date">
+          </div>
+        </div>
 
-  <label>Datum</label>
-  <input id="datum" type="date">
+        <div class="field">
+          <label>Setting</label>
+          <select id="setting">
+            <option>Poliklinisch</option>
+            <option>Opname</option>
+            <option>Telefonisch</option>
+            <option>Huisbezoek</option>
+            <option>SEH</option>
+            <option>Overig</option>
+          </select>
+        </div>
 
-  <label>Bewustzijn</label>
-  <input id="bewustzijn" value="Helder">
+        <div class="row">
+          <div class="field">
+            <label>Bewustzijn</label>
+            <select id="bewustzijn">
+              <option>Helder</option>
+              <option>Slaperig</option>
+              <option>Dromerig</option>
+              <option>Verward</option>
+              <option>Delirant</option>
+              <option>Stuporeus</option>
+              <option>Comateus</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Oriëntatie</label>
+            <select id="orientatie">
+              <option>Georiënteerd in tijd, plaats, persoon en situatie</option>
+              <option>Deels georiënteerd</option>
+              <option>Gedesoriënteerd in tijd</option>
+              <option>Gedesoriënteerd in plaats</option>
+              <option>Gedesoriënteerd in persoon</option>
+              <option>Gedesoriënteerd in situatie</option>
+            </select>
+          </div>
+        </div>
 
-  <label>Oriëntatie</label>
-  <input id="orientatie" value="Georiënteerd in tijd, plaats en persoon">
+        <div class="row">
+          <div class="field">
+            <label>Algemene verschijning</label>
+            <select id="verschijning">
+              <option>Passend verzorgd, leeftijdsadequaat</option>
+              <option>Matig verzorgd</option>
+              <option>Slecht verzorgd</option>
+              <option>Slordig gekleed</option>
+              <option>Over- of ondergekleed</option>
+              <option>Opvallende fysieke kenmerken / bijzonderheden</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Contact / attitude</label>
+            <select id="attitude">
+              <option>Coöperatief</option>
+              <option>Achterdochtig</option>
+              <option>Geremd</option>
+              <option>Guarded / afhoudend</option>
+              <option>Opstandig</option>
+              <option>Vriendelijk / innemend</option>
+              <option>Overvriendelijk</option>
+              <option>Vijandig</option>
+            </select>
+          </div>
+        </div>
 
-  <label>Stemming</label>
-  <input id="stemming" value="Neutraal">
+        <div class="row">
+          <div class="field">
+            <label>Oogcontact</label>
+            <select id="oogcontact">
+              <option>Adequaat</option>
+              <option>Verminderd</option>
+              <option>Vermeden</option>
+              <option>Intens / starend</option>
+              <option>Intermitterend</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Psychomotoriek</label>
+            <select id="psychomotoriek">
+              <option>Normaal</option>
+              <option>Geremd</option>
+              <option>Geagiteerd</option>
+              <option>Rusteloos</option>
+              <option>Versneld</option>
+              <option>Vertraagd</option>
+              <option>Katatoon</option>
+            </select>
+          </div>
+        </div>
 
-  <label>Denkinhoud</label>
-  <input id="denkinhoud" value="Geen waanideeën of suïcidaliteit gemeld">
+        <div class="row">
+          <div class="field">
+            <label>Spraak - tempo</label>
+            <select id="spraaktempo">
+              <option>Normaal</option>
+              <option>Versneld</option>
+              <option>Vertraagd</option>
+              <option>Druk</option>
+              <option>Armoedig</option>
+              <option>Mutistisch</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Spraak - volume / kwaliteit</label>
+            <select id="spraakkwaliteit">
+              <option>Normaal</option>
+              <option>Zacht</option>
+              <option>Luid</option>
+              <option>Monotoon</option>
+              <option>Hees</option>
+              <option>Onsamenhangend</option>
+            </select>
+          </div>
+        </div>
 
-  <label>Waarneming</label>
-  <input id="waarneming" value="Geen hallucinaties">
+        <div class="row">
+          <div class="field">
+            <label>Stemming</label>
+            <select id="stemming">
+              <option>Euthym</option>
+              <option>Somber</option>
+              <option>Angstig</option>
+              <option>Prikkelbaar</option>
+              <option>Euforisch</option>
+              <option>Labiel</option>
+              <option>Neutraal</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Affect</label>
+            <select id="affect">
+              <option>Passend / congruent</option>
+              <option>Vlak</option>
+              <option>Geremd</option>
+              <option>Verruimd</option>
+              <option>Blunted</option>
+              <option>Labiel</option>
+              <option>Incongruent</option>
+            </select>
+          </div>
+        </div>
 
-  <label>Overige observaties</label>
-  <textarea id="extra" placeholder="Aanvullende notities"></textarea>
+        <div class="row">
+          <div class="field">
+            <label>Denkvorm</label>
+            <select id="denkvorm">
+              <option>Logisch en doelgericht</option>
+              <option>Circumstantieel</option>
+              <option>Tangentieel</option>
+              <option>Associatief los</option>
+              <option>Versnipperd</option>
+              <option>Gedachtenvlucht</option>
+              <option>Thought blocking</option>
+              <option>Perseveratief</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Denkinhoud</label>
+            <select id="denkinhoud">
+              <option>Geen bijzonderheden</option>
+              <option>Piekeren</option>
+              <option>Dwanggedachten</option>
+              <option>Wanen</option>
+              <option>Wantrouwen / achterdocht</option>
+              <option>Suïcidale gedachten</option>
+              <option>Homicidale gedachten</option>
+              <option>Preoccupatie</option>
+            </select>
+          </div>
+        </div>
 
-  <button onclick="genereer()">Genereer rapport</button>
-  <button onclick="kopieer()">Kopieer rapport</button>
+        <div class="row">
+          <div class="field">
+            <label>Waarneming</label>
+            <select id="waarneming">
+              <option>Geen bijzonderheden</option>
+              <option>Illusies</option>
+              <option>Auditieve hallucinaties</option>
+              <option>Visuele hallucinaties</option>
+              <option>Tactiele hallucinaties</option>
+              <option>Olfactorische hallucinaties</option>
+              <option>Gustatorische hallucinaties</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Cognitie / aandacht</label>
+            <select id="cognitie">
+              <option>Aandacht en concentratie intact</option>
+              <option>Aandacht verminderd</option>
+              <option>Concentratie verminderd</option>
+              <option>Geheugen intact</option>
+              <option>Geheugen gestoorde indruk</option>
+              <option>Niet goed te beoordelen</option>
+            </select>
+          </div>
+        </div>
 
-  <h2>Rapport</h2>
-  <pre id="uitvoer"></pre>
+        <div class="row">
+          <div class="field">
+            <label>Inzicht</label>
+            <select id="inzicht">
+              <option>Goed</option>
+              <option>Gedeeltelijk</option>
+              <option>Beperkt</option>
+              <option>Afwezig</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Oordeelsvermogen</label>
+            <select id="oordeel">
+              <option>Voldoende</option>
+              <option>Gedeeltelijk verminderd</option>
+              <option>Verminderd</option>
+              <option>Afwezig</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Risico</label>
+          <select id="risico">
+            <option>Geen acute risico-indicaties</option>
+            <option>Suïcidaliteit: ontkennend</option>
+            <option>Suïcidaliteit: passieve gedachten</option>
+            <option>Suïcidaliteit: actieve gedachten</option>
+            <option>Suïcidaliteit: plan aanwezig</option>
+            <option>Aggressierisico verhoogd</option>
+            <option>Zelfverwaarlozing</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Extra observaties</label>
+          <textarea id="extra" placeholder="Bijv. context, nuance, relevante citaten of bijzonderheden"></textarea>
+        </div>
+
+        <div class="actions">
+          <button onclick="genereer()">Genereer rapport</button>
+          <button class="secondary" onclick="kopieer()">Kopieer tekst</button>
+          <button class="secondary" onclick="resetForm()">Reset</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Rapport</h2>
+        <pre id="uitvoer"></pre>
+      </div>
+    </div>
+  </div>
 
   <script>
-    function v(id){ return document.getElementById(id).value.trim(); }
-    function genereer() {
+    const ids = ["naam","datum","setting","bewustzijn","orientatie","verschijning","attitude","oogcontact","psychomotoriek","spraaktempo","spraakkwaliteit","stemming","affect","denkvorm","denkinhoud","waarneming","cognitie","inzicht","oordeel","risico","extra"];
+    const v = id => document.getElementById(id).value.trim();
+
+    function genereer(){
       const tekst =
-`Status mentalis${v('naam') ? ' - ' + v('naam') : ''}${v('datum') ? ' - ' + v('datum') : ''}
+`Status mentalis${v("naam") ? " - " + v("naam") : ""}${v("datum") ? " - " + v("datum") : ""}
 
-Bewustzijn: ${v('bewustzijn')}.
-Oriëntatie: ${v('orientatie')}.
-Stemming: ${v('stemming')}.
-Denkinhoud: ${v('denkinhoud')}.
-Waarneming: ${v('waarneming')}.
-Aanvullend: ${v('extra') || 'Geen verdere bijzonderheden.'}`;
-
-      document.getElementById('uitvoer').textContent = tekst;
+Setting: ${v("setting")}.
+Bewustzijn: ${v("bewustzijn")}.
+Oriëntatie: ${v("orientatie")}.
+Algemene verschijning: ${v("verschijning")}.
+Contact/attitude: ${v("attitude")}.
+Oogcontact: ${v("oogcontact")}.
+Psychomotoriek: ${v("psychomotoriek")}.
+Spraak: tempo ${v("spraaktempo").toLowerCase()}, kwaliteit ${v("spraakkwaliteit").toLowerCase()}.
+Stemming: ${v("stemming")}.
+Affect: ${v("affect")}.
+Denkvorm: ${v("denkvorm")}.
+Denkinhoud: ${v("denkinhoud")}.
+Waarneming: ${v("waarneming")}.
+Cognitie/aandacht: ${v("cognitie")}.
+Inzicht: ${v("inzicht")}.
+Oordeelsvermogen: ${v("oordeel")}.
+Risico: ${v("risico")}.
+${v("extra") ? "Extra observaties: " + v("extra") : "Extra observaties: geen verdere bijzonderheden."}`;
+      document.getElementById("uitvoer").textContent = tekst;
       return tekst;
     }
-    async function kopieer() {
+
+    async function kopieer(){
       const tekst = genereer();
       try { await navigator.clipboard.writeText(tekst); } catch(e) {}
     }
+
+    function resetForm(){
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el.tagName === "SELECT") el.selectedIndex = 0;
+        else el.value = "";
+      });
+      genereer();
+    }
+
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener("change", genereer);
+      el.addEventListener("input", genereer);
+    });
     genereer();
   </script>
 </body>
