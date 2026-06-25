@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Status mentalis rapportagegenerator</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --line:#d9dde7;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --accent:#2563eb;
+      --accent2:#0f766e;
+      --shadow:0 8px 24px rgba(15,23,42,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#eef2ff 0%, var(--bg) 180px);
+      color:var(--text);
+    }
+    header{
+      max-width:1400px;
+      margin:0 auto;
+      padding:24px 16px 8px;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(1.4rem,2vw,2rem);
+    }
+    .sub{
+      color:var(--muted);
+      margin:0;
+      line-height:1.5;
+    }
+    .wrap{
+      max-width:1400px;
+      margin:0 auto;
+      padding:16px;
+      display:grid;
+      grid-template-columns:minmax(320px,1.1fr) minmax(320px,.9fr);
+      gap:16px;
+      align-items:start;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .section{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:14px;
+      background:#fff;
+    }
+    .section h2{
+      margin:0 0 10px;
+      font-size:1.05rem;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+      gap:8px 10px;
+    }
+    label.chk{
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      padding:8px 10px;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+      cursor:pointer;
+      background:#fafafa;
+      line-height:1.35;
+    }
+    label.chk:hover{border-color:#c7d2fe;background:#f8fbff}
+    input[type="checkbox"]{
+      width:18px;height:18px;margin-top:2px;accent-color:var(--accent);
+      flex:0 0 auto;
+    }
+    textarea, input[type="text"], input[type="date"]{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      font:inherit;
+      background:#fff;
+    }
+    textarea{min-height:92px;resize:vertical}
+    .row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .btns{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin:12px 0 0;
+    }
+    button{
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      font:inherit;
+      cursor:pointer;
+    }
+    .primary{background:var(--accent);color:#fff}
+    .secondary{background:#e5e7eb;color:#111827}
+    .ghost{background:#ecfeff;color:#115e59}
+    .report{
+      white-space:pre-wrap;
+      line-height:1.6;
+      min-height:520px;
+      background:#0b1220;
+      color:#e5eefc;
+      border-radius:16px;
+      padding:16px;
+      overflow:auto;
+      font-size:.96rem;
+    }
+    .small{
+      color:var(--muted);
+      font-size:.92rem;
+      margin-top:8px;
+    }
+    .toolbar{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#eef2ff;
+      color:#3730a3;
+      font-size:.85rem;
+    }
+    @media (max-width: 960px){
+      .wrap{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Status mentalis rapportagegenerator</h1>
+    <p class="sub">Klikbare checklist met automatisch rapport. Vul alleen in wat relevant is en pas de vrije tekst aan waar nodig.</p>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <div class="row">
+        <div>
+          <label for="naam">Naam / initialen</label>
+          <input id="naam" type="text" placeholder="Bijv. J.D.">
+        </div>
+        <div>
+          <label for="datum">Datum</label>
+          <input id="datum" type="date">
+        </div>
+        <div>
+          <label for="setting">Setting</label>
+          <input id="setting" type="text" placeholder="Bijv. polikliniek / opname / huisbezoek">
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Algemene indruk</h2>
+        <div class="grid">
+          <label class="chk"><input type="checkbox" class="mse" data-group="algemeen" data-label="adequaat verzorgd"> adequaat verzorgd</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="algemeen" data-label="slordig verzorgd"> slordig verzorgd</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="algemeen" data-label="contact makend"> contact makend</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="algemeen" data-label="afwerend"> afwerend</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="algemeen" data-label="rustig"> rustig</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="algemeen" data-label="onrustig"> onrustig</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Bewustzijn en oriëntatie</h2>
+        <div class="grid">
+          <label class="chk"><input type="checkbox" class="mse" data-group="bewustzijn" data-label="helder bewustzijn"> helder bewustzijn</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="bewustzijn" data-label="suf"> suf</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="bewustzijn" data-label="verward"> verward</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="bewustzijn" data-label="gedesoriënteerd"> gedesoriënteerd</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="oriëntatie" data-label="georiënteerd in tijd"> georiënteerd in tijd</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="oriëntatie" data-label="georiënteerd in plaats"> georiënteerd in plaats</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="oriëntatie" data-label="georiënteerd in persoon"> georiënteerd in persoon</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="oriëntatie" data-label="georiënteerd in situatie"> georiënteerd in situatie</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Spraak</h2>
+        <div class="grid">
+          <label class="chk"><input type="checkbox" class="mse" data-group="spraak" data-label="normale spraak"> normale spraak</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="spraak" data-label="spraakdruk"> spraakdruk</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="spraak" data-label="traag spreken"> traag spreken</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="spraak" data-label="monotoon"> monotoon</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="spraak" data-label="onduidelijk articulerend"> onduidelijk articulerend</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Stemming en affect</h2>
+        <div class="grid">
+          <label class="chk"><input type="checkbox" class="mse" data-group="stemming" data-label="euthym"> euthym</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="stemming" data-label="somber"> somber</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="stemming" data-label="angstig"> angstig</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="stemming" data-label="prikkelbaar"> prikkelbaar</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="affect" data-label="adequaat affect"> adequaat affect</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="affect" data-label="vlak affect"> vlak affect</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="affect" data-label="vervlakking"> vervlakking</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="affect" data-label="instabiel affect"> instabiel affect</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Denkproces en denkinhoud</h2>
+        <div class="grid">
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkproces" data-label="logisch en samenhangend"> logisch en samenhangend</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkproces" data-label="tangentieel"> tangentieel</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkproces" data-label="omstandig"> omstandig</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkproces" data-label="geblokkeerd"> geblokkeerd</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkproces" data-label="versneld"> versneld</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkproces" data-label="vertraagd"> vertraagd</label>
+
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkinhoud" data-label="geen bijzondere denkinhoud"> geen bijzondere denkinhoud</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkinhoud" data-label="preoccupaties"> preoccupaties</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkinhoud" data-label="wanen"> wanen</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkinhoud" data-label="dwanggedachten"> dwanggedachten</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkinhoud" data-label="suïcidaliteit"> suïcidaliteit</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="denkinhoud" data-label="homicidaliteit"> homicidaliteit</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Waarneming, cognitie, inzicht en oordeel</h2>
+        <div class="grid">
+          <label class="chk"><input type="checkbox" class="mse" data-group="waarneming" data-label="geen waarnemingsstoornissen"> geen waarnemingsstoornissen</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="waarneming" data-label="hallucinaties"> hallucinaties</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="waarneming" data-label="illusies"> illusies</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="waarneming" data-label="depersonalisatie/derealisatie"> depersonalisatie/derealisatie</label>
+
+          <label class="chk"><input type="checkbox" class="mse" data-group="cognitie" data-label="aandacht intact"> aandacht intact</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="cognitie" data-label="concentratie verminderd"> concentratie verminderd</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="cognitie" data-label="geheugen adequate indruk"> geheugen adequate indruk</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="cognitie" data-label="cognitie niet volledig te beoordelen"> cognitie niet volledig te beoordelen</label>
+
+          <label class="chk"><input type="checkbox" class="mse" data-group="inzicht" data-label="goed inzicht"> goed inzicht</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="inzicht" data-label="gedeeltelijk inzicht"> gedeeltelijk inzicht</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="inzicht" data-label="beperkt inzicht"> beperkt inzicht</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="inzicht" data-label="geen inzicht"> geen inzicht</label>
+
+          <label class="chk"><input type="checkbox" class="mse" data-group="oordeel" data-label="goed oordeel"> goed oordeel</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="oordeel" data-label="gedeeltelijk oordeel"> gedeeltelijk oordeel</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="oordeel" data-label="beperkt oordeel"> beperkt oordeel</label>
+          <label class="chk"><input type="checkbox" class="mse" data-group="oordeel" data-label="verminderd oordeel"> verminderd oordeel</label>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Vrije aanvulling</h2>
+        <textarea id="aanvulling" placeholder="Bijv. context, bijzonderheden, citaten of nuancering..."></textarea>
+      </div>
+
+      <div class="btns">
+        <button class="primary" onclick="genereer()">Genereer rapport</button>
+        <button class="ghost" onclick="kopieerRapport()">Kopieer rapport</button>
+        <button class="secondary" onclick="resetAlles()">Reset</button>
+      </div>
+      <div class="small">Tip: selecteer per onderdeel alleen de termen die van toepassing zijn. Het rapport wordt automatisch opgebouwd in klinische stijl.</div>
+    </section>
+
+    <aside class="card">
+      <div class="toolbar">
+        <div class="pill">Automatisch rapport</div>
+        <div class="small" id="statuscount"></div>
+      </div>
+      <div id="rapport" class="report"></div>
+    </aside>
+  </main>
+
+  <script>
+    const fields = ["naam","datum","setting","aanvulling"];
+    const groups = ["algemeen","bewustzijn","oriëntatie","spraak","stemming","affect","denkproces","denkinhoud","waarneming","cognitie","inzicht","oordeel"];
+
+    function escapeHtml(s){ return (s||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m])); }
+
+    function selectedByGroup(group){
+      return [...document.querySelectorAll(`input.mse[data-group="${group}"]:checked`)]
+        .map(x => x.dataset.label);
+    }
+
+    function cleanList(items){
+      return [...new Set(items)].filter(Boolean);
+    }
+
+    function sentenceFrom(group, prefix){
+      const items = cleanList(selectedByGroup(group));
+      if(!items.length) return "";
+      return `${prefix}: ${items.join(", ")}.`;
+    }
+
+    function genereer(){
+      const naam = document.getElementById("naam").value.trim() || "Patiënt";
+      const datum = document.getElementById("datum").value || new Date().toISOString().slice(0,10);
+      const setting = document.getElementById("setting").value.trim();
+      const aanvulling = document.getElementById("aanvulling").value.trim();
+
+      const lines = [];
+      lines.push(`Status mentalis`);
+      lines.push(`Naam: ${naam}`);
+      lines.push(`Datum: ${datum}`);
+      if(setting) lines.push(`Setting: ${setting}`);
+      lines.push("");
+
+      const s1 = sentenceFrom("algemeen", "Algemene indruk");
+      const s2 = sentenceFrom("bewustzijn", "Bewustzijn");
+      const s3 = sentenceFrom("oriëntatie", "Oriëntatie");
+      const s4 = sentenceFrom("spraak", "Spraak");
+      const s5 = sentenceFrom("stemming", "Stemming");
+      const s6 = sentenceFrom("affect", "Affect");
+      const s7 = sentenceFrom("denkproces", "Denkproces");
+      const s8 = sentenceFrom("denkinhoud", "Denkinhoud");
+      const s9 = sentenceFrom("waarneming", "Waarneming");
+      const s10 = sentenceFrom("cognitie", "Cognitie");
+      const s11 = sentenceFrom("inzicht", "Inzicht");
+      const s12 = sentenceFrom("oordeel", "Oordeel");
+
+      [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12].forEach(s => { if(s) lines.push(s); });
+
+      if(aanvulling){
+        lines.push("");
+        lines.push("Aanvulling:");
+        lines.push(aanvulling);
+      }
+
+      if(![s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12].some(Boolean) && !aanvulling){
+        lines.push("Nog geen kenmerken geselecteerd.");
+      }
+
+      document.getElementById("rapport").textContent = lines.join("\n");
+      const count = document.querySelectorAll('input.mse:checked').length;
+      document.getElementById("statuscount").textContent = `${count} kenmerken geselecteerd`;
+    }
+
+    function kopieerRapport(){
+      const text = document.getElementById("rapport").textContent;
+      navigator.clipboard.writeText(text);
+    }
+
+    function resetAlles(){
+      fields.forEach(id => document.getElementById(id).value = "");
+      document.querySelectorAll("input.mse").forEach(el => el.checked = false);
+      document.getElementById("datum").valueAsDate = null;
+      genereer();
+    }
+
+    document.querySelectorAll("input, textarea").forEach(el => {
+      el.addEventListener("input", genereer);
+      el.addEventListener("change", genereer);
+    });
+
+    genereer();
+  </script>
+</body>
+</html>
